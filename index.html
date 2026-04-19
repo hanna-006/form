@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple Form</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .form-box {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0 0 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #888;
+    }
+
+    input.error {
+      border-color: red;
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    .err-msg {
+      display: none;
+      font-size: 13px;
+      color: red;
+      margin-top: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 9px;
+      font-size: 14px;
+      background: white;
+      border: 1px solid #aaa;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.25rem;
+    }
+
+    button:hover {
+      background: #f0f0f0;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .success-msg {
+      display: none;
+      margin-top: 1rem;
+      padding: 10px 12px;
+      background: #eaffea;
+      border: 1px solid #a3d9a3;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #2d6a2d;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-box">
+    <h2>User info</h2>
+
+    <div class="field">
+      <label for="name">Name</label>
+      <input type="text" id="name" placeholder="Enter your name" />
+      <span class="err-msg" id="name-err"></span>
+    </div>
+
+    <div class="field">
+      <label for="age">Age</label>
+      <input type="number" id="age" placeholder="Enter your age" min="1" max="120" />
+      <span class="err-msg" id="age-err"></span>
+    </div>
+
+    <button onclick="handleSubmit()">Submit</button>
+
+    <div class="success-msg" id="success-msg"></div>
+  </div>
+
+  <script>
+    function showError(inputId, errId, msg) {
+      document.getElementById(errId).textContent = msg;
+      document.getElementById(errId).style.display = 'block';
+      document.getElementById(inputId).classList.add('error');
+    }
+
+    function clearError(inputId, errId) {
+      document.getElementById(errId).style.display = 'none';
+      document.getElementById(inputId).classList.remove('error');
+    }
+
+    function handleSubmit() {
+      const name = document.getElementById('name').value.trim();
+      const age = document.getElementById('age').value.trim();
+      const success = document.getElementById('success-msg');
+      success.style.display = 'none';
+
+      let valid = true;
+
+      clearError('name', 'name-err');
+      clearError('age', 'age-err');
+
+      if (!name) {
+        showError('name', 'name-err', 'Name is required.');
+        valid = false;
+      } else if (name.length < 2) {
+        showError('name', 'name-err', 'Name must be at least 2 characters.');
+        valid = false;
+      }
+
+      if (!age) {
+        showError('age', 'age-err', 'Age is required.');
+        valid = false;
+      } else if (parseInt(age) < 1 || parseInt(age) > 120) {
+        showError('age', 'age-err', 'Please enter a valid age between 1 and 120.');
+        valid = false;
+      }
+
+      if (valid) {
+        success.textContent = 'Submitted! Name: ' + name + ', Age: ' + parseInt(age);
+        success.style.display = 'block';
+        document.getElementById('name').value = '';
+        document.getElementById('age').value = '';
+      }
+    }
+
+    document.getElementById('name').addEventListener('input', () => clearError('name', 'name-err'));
+    document.getElementById('age').addEventListener('input', () => clearError('age', 'age-err'));
+  </script>
+
+</body>
+      </html>
